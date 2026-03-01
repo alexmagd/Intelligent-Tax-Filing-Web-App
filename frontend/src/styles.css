@@ -1,0 +1,40 @@
+/*
+  Global Styling
+
+  - Provides modern gradient background
+  - Defines shared input and button styles
+  - Keeps styling centralized for consistency
+*/
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+button {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  background-color: #667eea;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  background-color: #5a67d8;
+}
