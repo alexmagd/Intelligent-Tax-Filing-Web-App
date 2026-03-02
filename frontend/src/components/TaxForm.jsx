@@ -13,17 +13,39 @@ function TaxForm({ onCalculate }) {
   const [income, setIncome] = useState("");
   const [expenses, setExpenses] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent page reload
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    // Basic validation
     if (income <= 0 || expenses < 0) {
       alert("Please enter valid numbers.");
       return;
     }
 
-    // Pass numeric values back to parent
-    onCalculate(Number(income), Number(expenses));
+    try {
+      // Send POST request to FastAPI backend
+      const response = await fetch("http://127.0.0.1:8000/calculate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          income: Number(income),
+          expenses: Number(expenses),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+
+      // Send backend results up to parent component
+      onCalculate(data.taxable_income, data.estimated_tax);
+    } catch (error) {
+      console.error("Backend connection error:", error);
+      alert("Failed to connect to backend.");
+    }
   };
 
   return (

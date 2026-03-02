@@ -18,11 +18,7 @@ function App() {
   /*
     Function that gets passed down to TaxForm.
   */
-  const handleCalculation = (income, expenses) => {
-    const taxableIncome = income - expenses;
-    const estimatedTax = taxableIncome * 0.4; // Simple 40% tax logic
-
-    // Store result in state so UI re-renders
+  const handleCalculation = (taxableIncome, estimatedTax) => {
     setResult({
       taxableIncome,
       estimatedTax,
