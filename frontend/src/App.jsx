@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TaxForm from "./components/TaxForm"; // It should have been "./components/TaxForm" but for some reason it only works this way
+import TaxForm from "./components/TaxForm";
 import ResultCard from "./components/ResultCard";
 
 /*
@@ -24,6 +24,8 @@ function App() {
       estimatedTax,
     });
   };
+  const [advice, setAdvice] = useState(null);
+  const [loadingAdvice, setLoadingAdvice] = useState(false);
 
   return (
     <div style={styles.page}>
@@ -35,7 +37,11 @@ function App() {
         </p>
 
         {/* Passing calculation handler as a prop */}
-        <TaxForm onCalculate={handleCalculation} />
+        <TaxForm
+          onCalculate={handleCalculation}
+          setAdvice={setAdvice}
+          setLoadingAdvice={setLoadingAdvice}
+        />
 
         {/* Conditional rendering:
             ResultCard only shows if result exists */}
@@ -44,6 +50,21 @@ function App() {
             taxableIncome={result.taxableIncome}
             estimatedTax={result.estimatedTax}
           />
+        )}
+        {loadingAdvice && <p>Generating AI advice...</p>}
+
+        {advice && (
+          <div
+            style={{
+              marginTop: "20px",
+              background: "#f0f4ff",
+              padding: "15px",
+              borderRadius: "8px",
+            }}
+          >
+            <h3>AI Tax Advice</h3>
+            <p style={{ whiteSpace: "pre-line" }}>{advice}</p>
+          </div>
         )}
       </div>
     </div>

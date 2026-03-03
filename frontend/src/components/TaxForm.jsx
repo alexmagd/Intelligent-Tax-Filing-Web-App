@@ -9,7 +9,7 @@ import { useState } from "react";
   - Sends data upward via onCalculate prop
 */
 
-function TaxForm({ onCalculate }) {
+function TaxForm({ onCalculate, setAdvice, setLoadingAdvice }) {
   const [income, setIncome] = useState("");
   const [expenses, setExpenses] = useState("");
 
@@ -48,6 +48,37 @@ function TaxForm({ onCalculate }) {
     }
   };
 
+  const handleAdvice = async () => {
+    if (income <= 0 || expenses < 0) {
+      alert("Please enter valid numbers.");
+      return;
+    }
+
+    try {
+      setLoadingAdvice(true);
+
+      const response = await fetch("http://127.0.0.1:8000/advice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          income: Number(income),
+          expenses: Number(expenses),
+        }),
+      });
+
+      const data = await response.json();
+
+      setAdvice(data.advice);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to fetch AI advice.");
+    } finally {
+      setLoadingAdvice(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} style={styles.form}>
       <input
@@ -67,6 +98,9 @@ function TaxForm({ onCalculate }) {
       />
 
       <button type="submit">Calculate</button>
+      <button type="button" onClick={handleAdvice}>
+        Get AI Advice
+      </button>
     </form>
   );
 }
